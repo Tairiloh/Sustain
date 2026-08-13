@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <title>JejakKarbonKu GGF - Personal</title>
+  
+  <style>
+    /* 
+     * BASE VARIABLES & THEME 
+     */
+    :root {
+      --green: #0b7b36;
+      --green2: #14a34a;
+      --lime: #a6d64f;
+      --bg: #f4faf2;
+      --card: #ffffff;
+      --text: #102017;
+      --muted: #65736a;
+      --line: #dfe9df;
+      --danger: #b83d3d;
+      --shadow: 0 18px 45px rgba(11, 65, 30, 0.10);
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at 82% 0%, #eaf8e4 0, #f6fbf4 34%, #fff 100%);
+      color: var(--text);
+    }
+    
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    
+    /* 
+     * LAYOUT 
+     */
+    .app { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; height: 100vh; padding: 22px; background: rgba(255,255,255,.85); backdrop-filter: blur(18px); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 20px; z-index: 30; }
+    .brand { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .brand img { width: 145px; display: block; }
+    .brand .sub { font-weight: 850; color: #637065; font-size: 14px; margin-top: 6px; }
+    
+    /* 
+     * NAVIGATION 
+     */
+    .nav { display: flex; flex-direction: column; gap: 8px; }
+    .nav button { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 18px; background: transparent; color: #425047; font-weight: 900; text-align: left; transition: all 0.2s ease;}
+    .nav button:hover { background: #e8f5ea; }
+    .nav button.active { background: linear-gradient(135deg, #0b7b36, #0f9443); color: white; box-shadow: 0 12px 32px rgba(12, 122, 53, 0.22); }
+    .nav .ico { width: 36px; height: 36px; border-radius: 14px; background: #e8f5ea; display: grid; place-items: center; color: #0b7b36; flex: 0 0 36px; }
+    .nav button.active .ico { background: rgba(255, 255, 255, 0.15); color: white; }
+    
+    .side-card { margin-top: auto; background: #f1f8f1; border: 1px solid var(--line); border-radius: 22px; padding: 18px; color: #4d5a50; font-size: 13px; line-height: 1.45; }
+    .side-card b { display: block; color: #16301f; font-size: 16px; margin-bottom: 6px; }
+    
+    .main { padding: 28px 32px 110px; overflow: hidden; }
+    .page { display: none; animation: fade .18s ease; }
+    .page.active { display: block; }
+    
+    @keyframes fade {
+      from { opacity: .3; transform: translateY(3px); }
+      to { opacity: 1; transform: none; }
+    }
+    
+    /* 
+     * TYPOGRAPHY & COMPONENTS 
+     */
+    .topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 22px; }
+    .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #05742f; font-weight: 950; }
+    .title { font-size: 38px; line-height: 1.04; margin: 4px 0 0; letter-spacing: -.06em; }
+    .lead { font-size: 16px; color: var(--muted); margin: 10px 0 0; max-width: 820px; line-height: 1.5; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: white; border-radius: 999px; padding: 10px 14px; font-weight: 900; color: #405047; box-shadow: 0 8px 22px rgba(0,0,0,.04); }
+    .dot { width: 12px; height: 12px; background: #19ad55; border-radius: 50%; box-shadow: 0 0 0 5px #e5f7eb; }
+    
+    /* Grids */
+    .grid { display: grid; gap: 18px; }
+    .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 22px; align-items: start; }
+    
+    /* Cards */
+    .card { background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: 28px; padding: 22px; box-shadow: var(--shadow); }
+    .card h3 { margin: 0 0 14px; font-size: 20px; letter-spacing: -.035em; }
+    .hero { background: linear-gradient(135deg, #0b7b36 0%, #139744 58%, #9edb54 100%); color: white; position: relative; overflow: hidden; min-height: 168px; }
+    .hero:after { content: ""; position: absolute; right: -55px; bottom: -90px; width: 245px; height: 245px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); }
+    .hero > * { position: relative; z-index: 1; }
+    
+    /* Metrics */
+    .metric-label { font-weight: 900; opacity: .92; }
+    .metric { font-size: 48px; line-height: 1; font-weight: 950; letter-spacing: -.06em; margin: 18px 0 8px; }
+    .metric small { font-size: 18px; letter-spacing: 0; }
+    .metric-sub { color: rgba(255,255,255,.85); line-height: 1.45; }
+    .card:not(.hero) .metric-sub { color: var(--muted); }
+    
+    .kpi .label { color: #5f6e64; font-weight: 850; font-size: 13px; }
+    .kpi .value { font-size: 28px; font-weight: 950; letter-spacing: -.04em; margin-top: 8px; }
+    .note, .mini { font-size: 12px; color: var(--muted); line-height: 1.45; }
+    
+    /* Forms */
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: 12px; color: #4f5e55; font-weight: 950; }
+    .field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 16px; background: white; padding: 12px 13px; outline: none; color: var(--text); transition: border-color 0.2s;}
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: #16a34a; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.10); }
+    
+    .section-block { border: 1px solid var(--line); border-radius: 22px; padding: 16px; background: #fbfdfb; margin-top: 14px; }
+    .section-title { font-size: 17px; font-weight: 950; letter-spacing: -.025em; margin: 0 0 4px; }
+    .section-help { font-size: 12px; color: var(--muted); margin: 0 0 12px; line-height: 1.45; }
+    
+    .subcard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .subcard { border: 1px solid var(--line); background: white; border-radius: 18px; padding: 14px; }
+    .subcard h4 { margin: 0 0 10px; font-size: 15px; letter-spacing: -.01em; }
+    .trip-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .inline-total { margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 800; }
+    
+    /* Buttons */
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .btn { border-radius: 16px; padding: 12px 15px; font-weight: 950; background: #edf6ee; color: #0c7a35; border: 1px solid #d8eadb; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s ease; }
+    .btn:active { transform: scale(0.96); }
+    .btn.primary { background: linear-gradient(135deg, #0e863d, #10a34a); color: white; border: 0; box-shadow: 0 12px 30px rgba(12, 122, 53, 0.22); }
+    .btn.dark { background: #132118; color: white; border: 0; }
+    .btn.danger { background: #fff0f0; color: #b83d3d; border-color: #ffd4d4; }
+    
+    /* Charts & Tables */
+    .break-row { display: grid; grid-template-columns: 125px 1fr 80px; align-items: center; gap: 12px; margin: 13px 0; }
+    .break-row b { font-size: 13px; }
+    .break-row em { font-style: normal; text-align: right; font-size: 13px; color: #5b6a60; font-weight: 850; }
+    .bar { height: 10px; background: #edf4ee; border-radius: 999px; overflow: hidden; }
+    .bar span { display: block; height: 100%; background: linear-gradient(90deg, #0b7b36, #9bd33e); border-radius: 999px; transition: width 0.4s ease;}
+    .chart { height: 250px; width: 100%; }
+    
+    .tips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .tip { border: 1px solid var(--line); border-radius: 18px; background: #fbfdfb; padding: 14px; }
+    .tip b { display: block; margin-bottom: 7px; color: #0b7b36; }
+    
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 18px; background: white; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 720px; }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+    th { background: #f4f8f3; color: #536157; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 950; }
+    tr:last-child td { border-bottom: 0; }
+    
+    .empty { padding: 28px; text-align: center; color: var(--muted); border: 1px dashed #d5e4d5; border-radius: 18px; background: #fbfdfb; }
+    
+    .soft-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mini-card { border: 1px solid var(--line); background: #fbfdfb; border-radius: 18px; padding: 13px; }
+    .mini-card b { display: block; font-size: 24px; letter-spacing: -.04em; }
+    .mini-card span { font-size: 12px; color: var(--muted); font-weight: 850; }
+    
+    .contrib-hero { background: linear-gradient(135deg, #0b7b36, #109344 65%, #a7da65); color: white; border-radius: 26px; padding: 22px; position: relative; overflow: hidden; min-height: 150px; }
+    .contrib-big { font-size: 42px; line-height: 1; font-weight: 950; letter-spacing: -.05em; margin: 12px 0; }
+    
+    .toast { position: fixed; right: 20px; bottom: 20px; background: #122017; color: white; padding: 13px 15px; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.25); opacity: 0; transform: translateY(10px); pointer-events: none; transition: .22s; z-index: 150; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    
+    .mobile-save { display: none; }
+    
+    /* 
+     * RESPONSIVE DESIGN 
+     */
+    @media(max-width: 1050px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; flex-direction: row; align-items: center; overflow: auto; padding: 14px; }
+      .brand { border-bottom: 0; min-width: 185px; padding: 0; }
+      .brand img { width: 108px; }
+      .nav { flex-direction: row; min-width: max-content; }
+      .nav button { white-space: nowrap; }
+      .side-card { display: none; }
+      .split { grid-template-columns: 1fr; }
+      .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    
+    @media(max-width: 680px) {
+      body { padding-bottom: 128px; }
+      .app { display: block; }
+      .main { padding: 16px 14px 142px; }
+      .sidebar { position: fixed; left: 0; right: 0; bottom: 0; top: auto; height: 78px; background: rgba(255,255,255,.98); backdrop-filter: blur(18px); border-top: 1px solid var(--line); border-right: 0; padding: 8px; z-index: 90; display: block; overflow: visible; }
+      .brand, .side-card { display: none; }
+      .nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; min-width: 0; }
+      .nav button { padding: 7px 3px; border-radius: 15px; display: flex; flex-direction: column; gap: 3px; justify-content: center; text-align: center; font-size: 10.5px; line-height: 1.12; white-space: normal; }
+      .nav .ico { width: 26px; height: 26px; border-radius: 12px; font-size: 13px; }
+      .title { font-size: 25px; }
+      .lead { font-size: 14px; }
+      .grid.cols-4, .grid.cols-3, .grid.cols-2, .form-grid, .subcard-grid, .trip-grid, .soft-summary, .tips { grid-template-columns: 1fr; }
+      .topline { flex-direction: column; gap: 10px; margin-bottom: 14px; }
+      .card { padding: 16px; border-radius: 20px; }
+      .hero { grid-column: span 1!important; min-height: 145px; }
+      .metric { font-size: 34px; }
+      .metric small { font-size: 16px; }
+      .chart { height: 190px; }
+      .break-row { grid-template-columns: 92px 1fr 60px; gap: 8px; }
+      .field input, .field select, .field textarea { padding: 13px 12px; border-radius: 15px; }
+      .actions .btn { flex: 1; padding: 12px 10px; }
+      .table-wrap table { min-width: 680px; }
+      .mobile-save { display: flex; position: fixed; left: 14px; right: 14px; bottom: 88px; z-index: 95; gap: 10px; }
+      .mobile-save .btn { flex: 1; box-shadow: 0 14px 30px rgba(12, 122, 53, 0.18); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Data Default State -->
+  <script id="ggf-carbon-personal-data" type="application/json" data-ggf-carbon-export="true">
+    {
+      "schema": "ggf-carbon-personal-v2", 
+      "app": "JejakKarbonKu GGF", 
+      "type": "personal-master-file", 
+      "version": "v16-personal-collective-friendly", 
+      "factorVersion": "GGP-Carbon-Factor-R1-2026", 
+      "profile": {"userId": "", "userName": "", "department": "", "team": "", "pg": "", "role": ""}, 
+      "factors": {"motorKm": 0.113, "carKm": 0.197, "acHours": 0.837, "lampHours": 0.01674, "tvHours": 0.0465, "laptopHours": 0.054125, "phoneHours": 0.00372, "gridKwh": 0.93, "treeKgPerYear": 12.3}, 
+      "records": [], 
+      "contributions": [], 
+      "publishedAt": ""
+    }
+  </script>
+
+  <div class="app">
+    <!-- Sidebar / Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <!-- SVG / Img Placeholder -->
+        <div style="font-size:24px; font-weight: 900; color: var(--green);">GGF<span style="color:var(--lime)">.</span></div>
+        <div class="sub">Carbon Footprint Awareness</div>
+      </div>
+      <nav class="nav">
+        <button class="active" data-page="dashboard"><span class="ico">⌁</span>Dashboard</button>
+        <button data-page="input"><span class="ico">＋</span>Input Emisi</button>
+        <button data-page="contrib"><span class="ico">🌱</span>Kontribusi</button>
+        <button data-page="profile"><span class="ico">👤</span>Profil</button>
+      </nav>
+      <div class="side-card">
+        <b>Update File Personal</b>
+        <p>Setelah input atau edit data, klik <b>Save / Update Personal File</b> dan timpa file personal lama agar dashboard team membaca data terbaru.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      
+      <!-- DASHBOARD PAGE -->
+      <section id="dashboard" class="page active">
+        <div class="topline">
+          <div>
+            <div class="eyebrow">Personal Dashboard</div>
+            <h1 class="title">Jejak KarbonKu</h1>
+            <p class="lead" id="dashLead">Ringkasan emisi personal, dipisahkan antara aktivitas pribadi dan kolektif.</p>
+          </div>
+          <div class="pill"><span class="dot"></span><span id="activeDateLabel">Hari ini</span></div>
+        </div>
+        <div class="grid cols-4">
+          <div class="card hero" style="grid-column:span 2">
+            <div class="metric-label">Jejak karbon terakhir</div>
+            <div class="metric"><span id="todayTotal">0,00</span> <small>kgCO₂e</small></div>
+            <div class="metric-sub">Setara kebutuhan penyerapan ± <b id="treeEq">0,00 pohon</b> per tahun.</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">Aktivitas Pribadi</div>
+            <div class="value"><span id="personalTotalDash">0,00</span> kg</div>
+            <div class="note">Motor, mobil, laptop, handphone</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">Aktivitas Kolektif</div>
+            <div class="value"><span id="collectiveTotalDash">0,00</span> kg</div>
+            <div class="note">AC, lampu, TV bersama</div>
+          </div>
+        </div>
+        
+        <div class="section-spacer" style="height:18px"></div>
+        <div class="split">
+          <div class="card">
+            <h3>Tren Jejak Karbon</h3>
+            <canvas class="chart" id="trendChart"></canvas>
+            <p class="mini">Grafik mengikuti data harian yang tersimpan.</p>
+          </div>
+          <div class="card">
+            <h3>Breakdown Emisi Terakhir</h3>
+            <div id="breakdownBox"></div>
+          </div>
+        </div>
+        
+        <div class="section-spacer" style="height:18px"></div>
+        <div class="card">
+          <h3>Tips Prioritas</h3>
+          <div class="tips" id="tipsBox"></div>
+        </div>
+      </section>
+
+      <!-- INPUT PAGE -->
+      <section id="input" class="page">
+        <div class="topline">
+          <div>
+            <div class="eyebrow">Carbon Input</div>
+            <h1 class="title">Hitung Jejak Karbon</h1>
+            <p class="lead">Input dibuat ringkas agar mudah digunakan di HP. Emisi kolektif otomatis dibagi proporsional per pengguna.</p>
+          </div>
+          <div class="pill"><span class="dot"></span>Autosave lokal</div>
+        </div>
+        <div class="split">
+          <div class="card">
+            <h3>Data Aktivitas</h3>
+            <div class="form-grid">
+              <div class="field"><label>Tanggal</label><input type="date" id="dateInput"></div>
+            </div>
+            
+            <!-- Personal Activities -->
+            <div class="section-block">
+              <div class="section-title">Aktivitas Pribadi</div>
+              <p class="section-help">Aktivitas yang dilakukan secara individu oleh karyawan.</p>
+              <div class="subcard-grid">
+                <div class="subcard">
+                  <h4>Motor Pribadi</h4>
+                  <div class="trip-grid">
+                    <div class="field"><label>Rumah → kantor (km)</label><input type="number" id="motorGo" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Mobilitas kerja (km)</label><input type="number" id="motorWork" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Kantor → rumah (km)</label><input type="number" id="motorBack" min="0" step="0.1" placeholder="0"></div>
+                  </div>
+                  <div class="inline-total">Total motor: <b id="motorTotalLabel">0,00 km</b></div>
+                </div>
+                <div class="subcard">
+                  <h4>Mobil Pribadi</h4>
+                  <div class="trip-grid">
+                    <div class="field"><label>Rumah → kantor (km)</label><input type="number" id="carGo" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Mobilitas kerja (km)</label><input type="number" id="carWork" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Kantor → rumah (km)</label><input type="number" id="carBack" min="0" step="0.1" placeholder="0"></div>
+                  </div>
+                  <div class="inline-total">Total mobil: <b id="carTotalLabel">0,00 km</b></div>
+                </div>
+              </div>
+              <div style="height:12px"></div>
+              <div class="subcard-grid">
+                <div class="subcard">
+                  <h4>Laptop Personal</h4>
+                  <div class="field"><label>Pemakaian (jam/hari)</label><input type="number" id="laptopHours" min="0" step="0.1" placeholder="0"></div>
+                </div>
+                <div class="subcard">
+                  <h4>Handphone Personal</h4>
+                  <div class="field"><label>Charging (jam/hari)</label><input type="number" id="phoneHours" min="0" step="0.1" placeholder="0"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Collective Activities -->
+            <div class="section-block">
+              <div class="section-title">Aktivitas Kolektif</div>
+              <p class="section-help">Fasilitas bersama. Rumus: (Unit × Jam × Faktor) ÷ Jumlah Pengguna.</p>
+              <div class="subcard-grid">
+                <div class="subcard">
+                  <h4>AC Bersama</h4>
+                  <div class="form-grid">
+                    <div class="field"><label>Unit</label><select id="acUnits"></select></div>
+                    <div class="field"><label>Jam/hari</label><input type="number" id="acHours" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Pengguna</label><input type="number" id="acUsers" min="1" step="1" placeholder="1"></div>
+                  </div>
+                </div>
+                <div class="subcard">
+                  <h4>Lampu Bersama</h4>
+                  <div class="form-grid">
+                    <div class="field"><label>Unit</label><select id="lampUnits"></select></div>
+                    <div class="field"><label>Jam/hari</label><input type="number" id="lampHours" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Pengguna</label><input type="number" id="lampUsers" min="1" step="1" placeholder="1"></div>
+                  </div>
+                </div>
+                <div class="subcard">
+                  <h4>TV Bersama</h4>
+                  <div class="form-grid">
+                    <div class="field"><label>Unit</label><select id="tvUnits"></select></div>
+                    <div class="field"><label>Jam/hari</label><input type="number" id="tvHours" min="0" step="0.1" placeholder="0"></div>
+                    <div class="field"><label>Pengguna</label><input type="number" id="tvUsers" min="1" step="1" placeholder="1"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="actions">
+              <button class="btn primary" id="saveRecordBtn">Hitung & Simpan</button>
+              <button class="btn" id="loadDateBtn">Load Tanggal</button>
+              <button class="btn danger" id="deleteDateBtn">Hapus Tanggal</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>Preview Hasil</h3>
+            <div class="hero card" style="box-shadow:none">
+              <div class="metric-label">Total estimasi</div>
+              <div class="metric"><span id="previewTotal">0,00</span> <small>kgCO₂e</small></div>
+              <div class="metric-sub">Dominan: <b id="previewDominant">-</b></div>
+            </div>
+            <div style="height:14px"></div>
+            <div id="previewSplit" class="soft-summary"></div>
+            <div style="height:14px"></div>
+            <div id="previewBreakdown"></div>
+            <div class="actions">
+              <button class="btn dark" id="saveFileBtn">Save / Update Personal File</button>
+            </div>
+            <p class="mini"><b>Penting:</b> setelah update data, klik Save / Update Personal File lalu timpa file personal lama dengan nama yang sama.</p>
+          </div>
+        </div>
+        
+        <div style="height:18px"></div>
+        <div class="card">
+          <h3>Riwayat Input Emisi</h3>
+          <p class="mini">Klik Edit untuk mengubah data tanggal lama.</p>
+          <div id="historyBox"></div>
+        </div>
+      </section>
+
+      <!-- CONTRIBUTION PAGE -->
+      <section id="contrib" class="page">
+        <div class="topline">
+          <div>
+            <div class="eyebrow">Carbon Contribution</div>
+            <h1 class="title">Kontribusi Pengurangan Emisi</h1>
+            <p class="lead">Catat aksi seperti tanam pohon atau aktivitas pengurangan emisi lainnya.</p>
+          </div>
+          <div class="pill"><span class="dot"></span><span id="contribCount">0 aksi</span></div>
+        </div>
+        <div class="grid cols-3">
+          <div class="contrib-hero" style="grid-column:span 2">
+            <div class="metric-label">Total offset tercatat</div>
+            <div class="contrib-big"><span id="offsetTotal">0,00</span> <small>kgCO₂e</small></div>
+            <div class="metric-sub">Setara ± <b id="offsetTreeEq">0,00 pohon</b> per tahun.</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">Net emission</div>
+            <div class="value"><span id="netEmission">0,00</span> kg</div>
+            <div class="note">Total emisi - offset</div>
+          </div>
+        </div>
+        <div style="height:18px"></div>
+        <div class="split">
+          <div class="card">
+            <h3>Tambah Aksi</h3>
+            <div class="form-grid">
+              <div class="field"><label>Tanggal</label><input type="date" id="contribDate"></div>
+              <div class="field">
+                <label>Jenis aksi</label>
+                <select id="contribType">
+                  <option value="tree">Tanam Pohon</option>
+                  <option value="renewable">Energi Terbarukan</option>
+                  <option value="transport">Transport Rendah Emisi</option>
+                  <option value="waste">Reduce / Reuse / Recycling</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <div class="field"><label>Jumlah</label><input type="number" id="contribAmount" min="0" step="0.01" placeholder="0"></div>
+              <div class="field"><label>Faktor offset kgCO₂e/unit</label><input type="number" id="contribFactor" min="0" step="0.0001" placeholder="0"></div>
+              <div class="field"><label>Catatan</label><input id="contribNote" placeholder="contoh: tanam mangrove"></div>
+            </div>
+            <div class="actions">
+              <button class="btn primary" id="saveContribBtn">Simpan Kontribusi</button>
+              <button class="btn" id="resetContribBtn">Reset</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Riwayat Kontribusi</h3>
+            <div id="contribHistory"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE PAGE -->
+      <section id="profile" class="page">
+        <div class="topline">
+          <div>
+            <div class="eyebrow">User Profile</div>
+            <h1 class="title">Profil Personal</h1>
+            <p class="lead">Profil dipakai oleh Team Dashboard untuk identifikasi user, ranking, dan tabulasi.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="form-grid">
+            <div class="field"><label>User ID / NIK</label><input id="userId" placeholder="contoh: 100123"></div>
+            <div class="field"><label>Nama Lengkap</label><input id="userName" placeholder="Nama user"></div>
+            <div class="field"><label>Departemen</label><input id="department" placeholder="Departemen"></div>
+            <div class="field"><label>Team / Bagian</label><input id="team" placeholder="Team"></div>
+            <div class="field"><label>PG / Area</label><input id="pg" placeholder="PG / Area"></div>
+            <div class="field"><label>Role</label><input id="role" placeholder="Role"></div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="saveProfileBtn">Simpan Profil</button>
+            <button class="btn dark" id="saveFileBtn2">Save / Update Personal File</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="mobile-save"><button class="btn dark" id="mobileSaveBtn">💾 Save Personal File</button></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- 
+    ======================================
+    JAVASCRIPT LOGIC
+    ======================================
+  -->
+  <script>
+    // System Constants
+    const VERSION = 'v16-personal-collective-friendly';
+    const FACTOR_VERSION = 'GGP-Carbon-Factor-R1-2026';
+    
+    // Carbon Emission Factors (kgCO2e per unit)
+    const FACTORS = {
+      motorKm: 0.113,      // Rata-rata motor di Indonesia
+      carKm: 0.197,        // Rata-rata mobil berbahan bakar bensin
+      acHours: 0.837,      // Asumsi AC 1 PK (~0.9 kW x 0.93 kg/kWh)
+      lampHours: 0.01674,  // Asumsi lampu 18W (0.018 kW x 0.93 kg/kWh)
+      tvHours: 0.0465,     // Asumsi TV 50W (0.05 kW x 0.93 kg/kWh)
+      laptopHours: 0.0541, // Asumsi Laptop 58W (0.058 kW x 0.93 kg/kWh)
+      phoneHours: 0.00372, // Asumsi Charger HP 4W
+      gridKwh: 0.93,       // Emisi Grid Listrik Nasional (Jamali)
+      treeKgPerYear: 12.3  // Kemampuan serap 1 pohon / tahun
+    };
+    
+    const CONTRIB_FACTORS = {
+      tree: FACTORS.treeKgPerYear,
+      renewable: FACTORS.gridKwh,
+      transport: FACTORS.motorKm,
+      waste: 1.2,
+      custom: 1
+    };
+
+    const BASE_KEY = 'ggf-carbon-personal-v16';
+    
+    // Helper Functions
+    const $ = id => document.getElementById(id);
+    const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0; };
+    const fmt = n => (Number(n) || 0).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+    const safeKey = s => { const p = s.profile || {}; return String(p.userId || p.userName || 'blank').toLowerCase().trim().replace(/[^a-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '') || 'blank'; };
+    const storageKey = () => BASE_KEY + '_' + safeKey(state);
+    
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+    
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+    }
+
+    // State Management
+    function defaultState() {
+      return {
+        profile: { userId: '', userName: '', department: '', team: '', pg: '', role: '' },
+        records: [],
+        contributions: [],
+        factors: { ...FACTORS },
+        factorVersion: FACTOR_VERSION,
+        publishedAt: ''
+      };
+    }
+
+    function readEmbedded() {
+      try {
+        const el = $('ggf-carbon-personal-data');
+        if (!el) return null;
+        const p = JSON.parse((el.textContent || '').trim());
+        return normalizeState(p);
+      } catch (e) { return null; }
+    }
+
+    function normalizeState(p) {
+      const s = defaultState();
+      if (!p || typeof p !== 'object') return s;
+      
+      s.profile = { ...s.profile, ...(p.profile || {}) };
+      s.records = (p.records || []).filter(r => r && r.date).map(r => enrichRecord(r));
+      s.contributions = (p.contributions || []).filter(c => c && c.date).map(c => ({
+        id: c.id || ('c_' + Date.now() + Math.random()),
+        date: c.date,
+        type: c.type || 'custom',
+        amount: num(c.amount),
+        factor: num(c.factor),
+        note: c.note || '',
+        total: num(c.total) || (num(c.amount) * num(c.factor)),
+        updatedAt: c.updatedAt || ''
+      }));
+      s.publishedAt = p.publishedAt || '';
+      return s;
+    }
+
+    let state = readEmbedded() || defaultState();
+    try {
+      const stored = localStorage.getItem(storageKey());
+      if (stored) state = normalizeState(JSON.parse(stored));
+    } catch (e) {}
+
+    function saveLocal() {
+      localStorage.setItem(storageKey(), JSON.stringify(state));
+    }
+
+    // UI Initializers
+    function fillUnitOptions(sel, max = 20) {
+      sel.innerHTML = '';
+      for (let i = 1; i <= max; i++) sel.add(new Option(i, i));
+    }
+
+    function setupOptions() {
+      fillUnitOptions($('acUnits'), 10);
+      fillUnitOptions($('lampUnits'), 30);
+      fillUnitOptions($('tvUnits'), 8);
+    }
+
+    // Core Logic
+    function getRecordFromForm() {
+      const motorKm = num($('motorGo').value) + num($('motorWork').value) + num($('motorBack').value);
+      const carKm = num($('carGo').value) + num($('carWork').value) + num($('carBack').value);
+      
+      const r = {
+        date: $('dateInput').value || todayISO(),
+        motorGo: num($('motorGo').value),
+        motorWork: num($('motorWork').value),
+        motorBack: num($('motorBack').value),
+        carGo: num($('carGo').value),
+        carWork: num($('carWork').value),
+        carBack: num($('carBack').value),
+        motorKm,
+        carKm,
+        laptopHours: num($('laptopHours').value),
+        phoneHours: num($('phoneHours').value),
+        acUnits: num($('acUnits').value || 1),
+        acHours: num($('acHours').value),
+        acUsers: Math.max(1, num($('acUsers').value || 1)),
+        lampUnits: num($('lampUnits').value || 1),
+        lampHours: num($('lampHours').value),
+        lampUsers: Math.max(1, num($('lampUsers').value || 1)),
+        tvUnits: num($('tvUnits').value || 1),
+        tvHours: num($('tvHours').value),
+        tvUsers: Math.max(1, num($('tvUsers').value || 1))
+      };
+      return enrichRecord(r);
+    }
+
+    function enrichRecord(r) {
+      const motorKm = num(r.motorKm || num(r.motorGo) + num(r.motorWork) + num(r.motorBack));
+      const carKm = num(r.carKm || num(r.carGo) + num(r.carWork) + num(r.carBack));
+      
+      const personal = {
+        Motor: motorKm * FACTORS.motorKm,
+        Mobil: carKm * FACTORS.carKm,
+        Laptop: num(r.laptopHours) * FACTORS.laptopHours,
+        Handphone: num(r.phoneHours) * FACTORS.phoneHours
+      };
+      
+      const collective = {
+        'AC Bersama': (num(r.acUnits || 1) * num(r.acHours) * FACTORS.acHours) / Math.max(1, num(r.acUsers || 1)),
+        'Lampu Bersama': (num(r.lampUnits || 1) * num(r.lampHours) * FACTORS.lampHours) / Math.max(1, num(r.lampUsers || 1)),
+        'TV Bersama': (num(r.tvUnits || 1) * num(r.tvHours) * FACTORS.tvHours) / Math.max(1, num(r.tvUsers || 1))
+      };
+      
+      const breakdown = { ...personal, ...collective };
+      const personalTotal = Object.values(personal).reduce((a, v) => a + num(v), 0);
+      const collectiveTotal = Object.values(collective).reduce((a, v) => a + num(v), 0);
+      const total = personalTotal + collectiveTotal;
+      
+      return { 
+        ...r, motorKm, carKm, breakdown, 
+        summary: { personalTotal, collectiveTotal, motorKm, carKm }, 
+        total, 
+        updatedAt: new Date().toISOString(), 
+        factorVersion: FACTOR_VERSION 
+      };
+    }
+
+    // Form Handlers
+    function setForm(r = {}) {
+      $('dateInput').value = r.date || todayISO();
+      $('motorGo').value = r.motorGo ?? r.motorKm ?? '';
+      $('motorWork').value = r.motorWork ?? '';
+      $('motorBack').value = r.motorBack ?? '';
+      $('carGo').value = r.carGo ?? r.carKm ?? '';
+      $('carWork').value = r.carWork ?? '';
+      $('carBack').value = r.carBack ?? '';
+      $('laptopHours').value = r.laptopHours || '';
+      $('phoneHours').value = r.phoneHours || '';
+      
+      $('acUnits').value = String(r.acUnits || 1);
+      $('acHours').value = r.acHours || '';
+      $('acUsers').value = r.acUsers || '';
+      
+      $('lampUnits').value = String(r.lampUnits || 1);
+      $('lampHours').value = r.lampHours || '';
+      $('lampUsers').value = r.lampUsers || '';
+      
+      $('tvUnits').value = String(r.tvUnits || 1);
+      $('tvHours').value = r.tvHours || '';
+      $('tvUsers').value = r.tvUsers || '';
+      
+      updatePreview();
+    }
+
+    function upsert(r) {
+      state.records = state.records.filter(x => x.date !== r.date);
+      state.records.push(r);
+      state.records.sort((a, b) => a.date.localeCompare(b.date));
+      saveLocal();
+    }
+
+    function latestRecord() {
+      return state.records.find(r => r.date === todayISO()) || state.records[state.records.length - 1] || null;
+    }
+
+    // Render Helpers
+    function renderBreakdown(el, breakdown) {
+      const entries = Object.entries(breakdown || {}).sort((a, b) => b[1] - a[1]);
+      const max = Math.max(...entries.map(e => e[1]), 1);
+      
+      el.innerHTML = entries.length ? entries.map(([k, v]) => `
+        <div class="break-row">
+          <b>${esc(k)}</b>
+          <div class="bar"><span style="width:${Math.max(2, (v / max) * 100)}%"></span></div>
+          <em>${fmt(v)} kg</em>
+        </div>
+      `).join('') : '<div class="empty">Belum ada data.</div>';
+    }
+
+    function updatePreview() {
+      const r = getRecordFromForm();
+      $('previewTotal').textContent = fmt(r.total);
+      
+      const top = Object.entries(r.breakdown).sort((a, b) => b[1] - a[1])[0];
+      $('previewDominant').textContent = top ? top[0] : '-';
+      
+      $('previewSplit').innerHTML = `
+        <div class="mini-card"><b>${fmt(r.summary.personalTotal)} kg</b><span>Aktivitas Pribadi</span></div>
+        <div class="mini-card"><b>${fmt(r.summary.collectiveTotal)} kg</b><span>Aktivitas Kolektif</span></div>
+      `;
+      
+      $('motorTotalLabel').textContent = fmt(r.summary.motorKm) + ' km';
+      $('carTotalLabel').textContent = fmt(r.summary.carKm) + ' km';
+      renderBreakdown($('previewBreakdown'), r.breakdown);
+    }
+
+    // Drawing Chart
+    function drawChart(canvas, records) {
+      const ctx = canvas.getContext('2d'), 
+            w = canvas.clientWidth, 
+            h = canvas.clientHeight, 
+            dpr = window.devicePixelRatio || 1;
+            
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+      
+      ctx.strokeStyle = '#e2ebe3';
+      for (let i = 0; i < 5; i++) {
+        let y = 24 + i * (h - 48) / 4;
+        ctx.beginPath();
+        ctx.moveTo(32, y);
+        ctx.lineTo(w - 12, y);
+        ctx.stroke();
+      }
+      
+      if (!records.length) {
+        ctx.fillStyle = '#768178';
+        ctx.font = '13px system-ui';
+        ctx.fillText('Belum ada data', w / 2 - 43, h / 2);
+        return;
+      }
+      
+      const data = records.slice(-15);
+      const max = Math.max(...data.map(r => r.total), 1);
+      const x = i => 32 + i * (w - 52) / Math.max(1, data.length - 1);
+      const y = v => h - 24 - (v / max) * (h - 52);
+      
+      ctx.strokeStyle = '#0b7b36';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      data.forEach((r, i) => i ? ctx.lineTo(x(i), y(r.total)) : ctx.moveTo(x(i), y(r.total)));
+      ctx.stroke();
+      
+      ctx.fillStyle = '#0b7b36';
+      data.forEach((r, i) => {
+        ctx.beginPath();
+        ctx.arc(x(i), y(r.total), 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // UI Renders
+    function renderDashboard() {
+      const r = latestRecord();
+      $('dashLead').textContent = (state.profile.userName ? 'Halo, ' + state.profile.userName + '. ' : '') + 'Ringkasan emisi personal, dipisahkan antara aktivitas pribadi dan kolektif.';
+      $('todayTotal').textContent = fmt(r?.total || 0);
+      $('personalTotalDash').textContent = fmt(r?.summary?.personalTotal || 0);
+      $('collectiveTotalDash').textContent = fmt(r?.summary?.collectiveTotal || 0);
+      $('treeEq').textContent = fmt(((r?.total || 0) * 365) / FACTORS.treeKgPerYear) + ' pohon';
+      $('activeDateLabel').textContent = r?.date || 'Hari ini';
+      
+      renderBreakdown($('breakdownBox'), r?.breakdown || {});
+      drawChart($('trendChart'), state.records);
+      renderTips(r);
+      renderHistory();
+      renderContribution();
+    }
+
+    function renderTips(r) {
+      const top = Object.entries(r?.breakdown || {}).sort((a, b) => b[1] - a[1])[0]?.[0] || 'aktivitas';
+      $('tipsBox').innerHTML = [
+        ['Fokus sumber terbesar', `${top} paling dominan pada data terakhir.`],
+        ['Isi data kolektif dengan benar', 'Gunakan jumlah pengguna agar emisi fasilitas bersama terbagi adil.'],
+        ['Update file personal', 'Setelah edit, timpa file lama supaya Team Dashboard membaca data terbaru.']
+      ].map(t => `<div class="tip"><b>${t[0]}</b><p class="mini">${t[1]}</p></div>`).join('');
+    }
+
+    function renderHistory() {
+      const rows = [...state.records].sort((a, b) => b.date.localeCompare(a.date));
+      $('historyBox').innerHTML = rows.length ? `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Tanggal</th><th>Total</th><th>Pribadi</th><th>Kolektif</th><th>Dominan</th><th>Aksi</th></tr>
+            </thead>
+            <tbody>
+              ${rows.map(r => {
+                const top = Object.entries(r.breakdown || {}).sort((a, b) => b[1] - a[1])[0] || ['-', 0];
+                return `<tr>
+                  <td><b>${esc(r.date)}</b></td>
+                  <td><b>${fmt(r.total)}</b></td>
+                  <td>${fmt(r.summary?.personalTotal || 0)}</td>
+                  <td>${fmt(r.summary?.collectiveTotal || 0)}</td>
+                  <td>${esc(top[0])}<br><span class="mini">${fmt(top[1])} kg</span></td>
+                  <td>
+                    <button class="btn" data-edit="${esc(r.date)}">Edit</button> 
+                    <button class="btn danger" data-del="${esc(r.date)}">Hapus</button>
+                  </td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>` : '<div class="empty">Belum ada riwayat. Isi data lalu klik Hitung & Simpan.</div>';
+    }
+
+    function saveProfile() {
+      state.profile = {
+        userId: $('userId').value.trim(),
+        userName: $('userName').value.trim(),
+        department: $('department').value.trim(),
+        team: $('team').value.trim(),
+        pg: $('pg').value.trim(),
+        role: $('role').value.trim()
+      };
+      saveLocal();
+      renderDashboard();
+      toast('Profil tersimpan');
+    }
+
+    function loadProfile() {
+      const p = state.profile;
+      $('userId').value = p.userId || '';
+      $('userName').value = p.userName || '';
+      $('department').value = p.department || '';
+      $('team').value = p.team || '';
+      $('pg').value = p.pg || '';
+      $('role').value = p.role || '';
+    }
+
+    function contribFactor(type) { return CONTRIB_FACTORS[type] || 1; }
+
+    function resetContrib() {
+      $('contribDate').value = todayISO();
+      $('contribType').value = 'tree';
+      $('contribAmount').value = '';
+      $('contribFactor').value = contribFactor('tree');
+      $('contribNote').value = '';
+    }
+
+    function saveContrib() {
+      const type = $('contribType').value, amount = num($('contribAmount').value), factor = num($('contribFactor').value);
+      if (!amount || !factor) { toast('Isi jumlah dan faktor offset dulu'); return; }
+      
+      state.contributions.push({
+        id: 'c_' + Date.now(),
+        date: $('contribDate').value || todayISO(),
+        type, amount, factor,
+        note: $('contribNote').value.trim(),
+        total: amount * factor,
+        updatedAt: new Date().toISOString()
+      });
+      
+      saveLocal();
+      resetContrib();
+      renderContribution();
+      toast('Kontribusi tersimpan');
+    }
+
+    function renderContribution() {
+      const offset = state.contributions.reduce((a, c) => a + num(c.total), 0);
+      const emission = state.records.reduce((a, r) => a + num(r.total), 0);
+      
+      $('offsetTotal').textContent = fmt(offset);
+      $('offsetTreeEq').textContent = fmt(offset / FACTORS.treeKgPerYear) + ' pohon';
+      $('netEmission').textContent = fmt(Math.max(0, emission - offset));
+      $('contribCount').textContent = state.contributions.length + ' aksi';
+      
+      $('contribHistory').innerHTML = state.contributions.length ? `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tanggal</th><th>Aksi</th><th>Jumlah</th><th>Offset</th><th>Aksi</th></tr></thead>
+            <tbody>
+              ${[...state.contributions].sort((a, b) => b.date.localeCompare(a.date)).map(c => `
+                <tr>
+                  <td>${esc(c.date)}</td>
+                  <td>${esc(c.type)}<br><span class="mini">${esc(c.note || '')}</span></td>
+                  <td>${fmt(c.amount)}</td>
+                  <td><b>${fmt(c.total)} kg</b></td>
+                  <td><button class="btn danger" data-contrib-del="${c.id}">Hapus</button></td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>` : '<div class="empty">Belum ada kontribusi.</div>';
+    }
+
+    // Export Logic
+    function makePayload() {
+      return {
+        schema: 'ggf-carbon-personal-v2',
+        app: 'JejakKarbonKu GGF',
+        type: 'personal-master-file',
+        version: VERSION,
+        factorVersion: FACTOR_VERSION,
+        publishedAt: new Date().toISOString(),
+        profile: state.profile,
+        factors: FACTORS,
+        records: state.records.map(enrichRecord),
+        contributions: state.contributions
+      };
+    }
+
+    function buildHtml(payload) {
+      const json = JSON.stringify(payload).replace(/</g, '\\u003c');
+      let html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      html = html.replace(/<script[^>]+id=["']ggf-carbon-personal-data["'][\s\S]*?<\/script>/i, `<script id="ggf-carbon-personal-data" type="application/json" data-ggf-carbon-export="true">${json}<\/script>`);
+      return html;
+    }
+
+    function download(name, content, type = 'text/html') {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([content], { type }));
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 600);
+    }
+
+    async function savePersonalFile() {
+      saveLocal();
+      const payload = makePayload();
+      
+      if (!payload.records.length) {
+        toast('Belum ada record. Klik Hitung & Simpan dulu.');
+        return;
+      }
+      
+      const nameBase = (state.profile.userName || state.profile.userId || 'user').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'user';
+      const fileName = `ggf_carbon_personal_${nameBase}.html`;
+      const html = buildHtml(payload);
+      
+      try {
+        if (window.showSaveFilePicker) {
+          const handle = await showSaveFilePicker({ suggestedName: fileName, types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }] });
+          const w = await handle.createWritable();
+          await w.write(new Blob([html], { type: 'text/html;charset=utf-8' }));
+          await w.close();
+          toast('File personal berhasil disimpan/ditimpa');
+          return;
+        }
+      } catch (e) {
+        if (e.name === 'AbortError') return;
+      }
+      
+      download(fileName, html, 'text/html;charset=utf-8');
+      toast('Browser tidak support overwrite langsung, file diunduh');
+    }
+
+    // Event Binders
+    function bind() {
+      // Navigation
+      document.querySelectorAll('.nav button').forEach(b => b.onclick = () => {
+        document.querySelectorAll('.nav button, .page').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        $(b.dataset.page).classList.add('active');
+        renderDashboard();
+      });
+      
+      // Auto-preview on input change
+      document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', updatePreview));
+      
+      // Data Handlers
+      $('saveRecordBtn').onclick = () => {
+        const r = getRecordFromForm();
+        upsert(r);
+        renderDashboard();
+        toast('Data tersimpan. Jangan lupa Save / Update Personal File.');
+      };
+      
+      $('loadDateBtn').onclick = () => {
+        const r = state.records.find(x => x.date === $('dateInput').value);
+        setForm(r || { date: $('dateInput').value || todayISO() });
+        toast(r ? 'Data tanggal dimuat' : 'Tanggal belum ada data');
+      };
+      
+      $('deleteDateBtn').onclick = () => {
+        const d = $('dateInput').value;
+        if (!d) return;
+        state.records = state.records.filter(r => r.date !== d);
+        saveLocal();
+        setForm({ date: d });
+        renderDashboard();
+        toast('Data tanggal dihapus');
+      };
+      
+      // Delegation for history tables
+      $('historyBox').addEventListener('click', e => {
+        const edit = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
+        if (edit) {
+          const r = state.records.find(x => x.date === edit.dataset.edit);
+          setForm(r);
+          document.querySelector('[data-page="input"]').click();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (del) {
+          state.records = state.records.filter(x => x.date !== del.dataset.del);
+          saveLocal();
+          renderDashboard();
+          toast('Data dihapus');
+        }
+      });
+      
+      $('saveProfileBtn').onclick = saveProfile;
+      $('saveFileBtn').onclick = savePersonalFile;
+      $('saveFileBtn2').onclick = savePersonalFile;
+      
+      $('mobileSaveBtn').onclick = () => {
+        if (document.getElementById('input').classList.contains('active')) {
+          upsert(getRecordFromForm());
+        }
+        renderDashboard();
+        savePersonalFile();
+      };
+      
+      // Contributions
+      $('contribType').onchange = () => $('contribFactor').value = contribFactor($('contribType').value);
+      $('saveContribBtn').onclick = saveContrib;
+      $('resetContribBtn').onclick = resetContrib;
+      
+      $('contribHistory').addEventListener('click', e => {
+        const b = e.target.closest('[data-contrib-del]');
+        if (b) {
+          state.contributions = state.contributions.filter(c => c.id !== b.dataset.contribDel);
+          saveLocal();
+          renderContribution();
+          toast('Kontribusi dihapus');
+        }
+      });
+    }
+
+    // App Initialization
+    function init() {
+      setupOptions();
+      $('dateInput').value = todayISO();
+      $('contribDate').value = todayISO();
+      resetContrib();
+      loadProfile();
+      setForm(latestRecord() || { date: todayISO() });
+      bind();
+      renderDashboard();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
